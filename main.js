@@ -55,7 +55,7 @@ app.whenReady().then(() => {
       const markdownOutput = convertToMarkdown(annotations);
 
       // Save the Markdown output to a file
-      const outputPath = await saveMarkdownOutput(markdownOutput, folderPath);
+      const outputPath = await saveMarkdownOutput(markdownOutput, folderPath, annotations.length > 0 ? annotations[0].book : 'koreader-annotations');
 
       return { success: true, message: `Successfully imported ${annotations.length} annotations and saved to ${outputPath}.`, annotations };
     } catch (error) {
@@ -76,7 +76,15 @@ async function fetchAnnotationFiles(folderPath) {
     const filePromises = luaFiles.map(async file => {
       const filePath = path.join(folderPath, file);
       const content = await fs.readFile(filePath, 'utf-8');
-      return { path: filePath, content };
+      let bookTitle = '';
+      const firstLine = content.split('\n')[0];
+      if (firstLine) {
+        const match = firstLine.match(/.*\/(.*)\.sdr\/.*/);
+        if (match) {
+          bookTitle = match[1];
+        }
+      }
+      return { path: filePath, content, bookTitle };
     });
 
     return Promise.all(filePromises);
@@ -90,6 +98,9 @@ async function parseAnnotationFiles(files) {
   for (const file of files) {
     try {
       const parsedAnnotations = parseAnnotationFile(file.content);
+       if (parsedAnnotations.length > 0) {
+        parsedAnnotations[0].book = file.bookTitle;
+      }
       annotations.push(...parsedAnnotations);
     } catch (error) {
       console.error(`Error parsing annotation file ${file.path}: ${error.message}`);
@@ -142,7 +153,8 @@ function parseAnnotationFile(content) {
 function convertToMarkdown(annotations) {
   let markdownOutput = '';
   for (const annotation of annotations) {
-    markdownOutput += `### ${annotation.text}\n`;
+    const timestamp = annotation.timestamp ? `[[${new Date(annotation.timestamp).toISOString().slice(0, 10)}]]` : '';
+    markdownOutput += `### ${annotation.text} ${timestamp}\n`;
     if (annotation.note) {
       markdownOutput += `${annotation.note}\n`;
     }
@@ -151,8 +163,8 @@ function convertToMarkdown(annotations) {
   return markdownOutput;
 }
 
-async function saveMarkdownOutput(markdownOutput, folderPath) {
-  const outputPath = path.join(folderPath, 'koreader-annotations.md');
+async function saveMarkdownOutput(markdownOutput, folderPath, bookTitle) {
+  const outputPath = path.join(folderPath, `${bookTitle.replace(/[^a-z0-9]/gi, '_')}.md`);
   await fs.writeFile(outputPath, markdownOutput, 'utf-8');
   return outputPath;
 }
