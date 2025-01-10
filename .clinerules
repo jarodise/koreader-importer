@@ -1,0 +1,25 @@
+{
+  "rules": [
+    {
+      "description": "Always output a git commit command when finishing a task",
+      "regex": "git commit",
+      "matchCase": false,
+      "failMessage": "Please include a git commit command with a descriptive message when finishing a task.",
+      "passMessage": "Git commit command found."
+    },
+    {
+      "description": "Update README.md when making significant changes",
+      "regex": "README\\.md",
+      "matchCase": false,
+      "failMessage": "Please update README.md when making significant changes to the codebase.",
+      "passMessage": "README.md update detected."
+    },
+    {
+      "description": "Never disable any lint rules without explicit user approval",
+      "regex": "eslint-disable|tslint:disable",
+      "matchCase": false,
+      "failMessage": "Do not disable lint rules without explicit user approval. Ask the user first and explain why.",
+      "passMessage": "No lint rule disabling found."
+    }
+  ]
+}

@@ -1,41 +1,44 @@
 ## Project Goals
 
--   Develop a Logseq plugin to import Koreader annotations.
--   Enable users to seamlessly transfer their annotations from Koreader to Logseq.
--   Provide a user-friendly interface for the import process.
+-   Develop a cross-platform desktop application to import Koreader annotations using Electron.
+-   Enable users to seamlessly transfer their annotations from Koreader to their preferred note-taking or knowledge management system.
+-   Provide a user-friendly interface for selecting the Koreader annotations directory and customizing the import settings.
 
 ## Key Features
 
--   Automatically detect and parse Koreader annotation files.
--   Convert Koreader annotations into Logseq-compatible format.
--   Allow users to customize the import settings (e.g., choose destination page, format).
--   Handle potential errors gracefully (e.g., invalid annotation file, network issues).
+-   Automatically detect and parse Koreader annotation files from a user-specified directory.
+-   Convert Koreader annotations into various formats (e.g., Markdown, JSON, CSV).
+-   Allow users to customize the output format and structure of the imported annotations.
+-   Provide options for integrating with popular note-taking and knowledge management systems (e.g., Logseq, Obsidian, Roam Research).
+-   Handle potential errors gracefully (e.g., invalid annotation file, directory not found).
 
 ## Completion Criteria
 
--   The plugin can successfully import annotations from a valid Koreader annotation file.
--   Imported annotations are accurately represented in Logseq.
--   The plugin handles various edge cases and potential errors.
--   The plugin is thoroughly tested and documented.
+-   The application can successfully import annotations from valid Koreader annotation files.
+-   Imported annotations are accurately represented in the chosen output format.
+-   The application handles various edge cases and potential errors.
+-   The application is thoroughly tested and documented.
 
 ## Progress Tracker
 
 ### Completed Tasks
 
--   [x] Create project directory and initialize documentation.
+-   [x] Research Koreader annotation file format.
+-   [x] Determine the new project direction (Electron-based cross-platform application).
 
 ### Pending Tasks
 
--   [ ] Research Koreader annotation file format.
--   [ ] Design the plugin architecture and data flow.
+-   [ ] Design the application architecture and data flow.
+-   [ ] Choose the appropriate technologies and frameworks for Electron development.
 -   [ ] Implement the annotation parsing logic.
--   [ ] Develop the Logseq integration.
--   [ ] Create the user interface for import settings.
--   [ ] Test the plugin with various scenarios.
+-   [ ] Develop the core import functionality.
+-   [ ] Create the user interface.
+-   [ ] Implement error handling and user feedback mechanisms.
+-   [ ] Test the application with various scenarios.
 -   [ ] Write comprehensive documentation.
 
 ## Scalability Considerations
 
--   Design the plugin to handle large annotation files efficiently.
--   Consider potential future integrations with other e-reader platforms.
--   Ensure the codebase is modular and maintainable for future updates.
+-   Design the application to handle large annotation files efficiently.
+-   Consider potential future integrations with other e-reader platforms or file formats.
+-   Ensure the codebase is modular and maintainable for future updates and feature additions.

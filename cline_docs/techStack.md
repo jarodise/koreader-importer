@@ -1,27 +1,34 @@
-## Programming Languages
-
--   JavaScript: Primary language for Logseq plugin development.
--   HTML/CSS: For the plugin's user interface.
-
 ## Frameworks and Libraries
 
--   Logseq Plugin API: For interacting with Logseq and extending its functionality.
--   React (Potentially): If a complex UI is needed, React could be used for building interactive components.
+-   Electron: For building a cross-platform desktop application using web technologies.
+-   Node.js: As the runtime environment for the application.
+-   Vue.js: For building the user interface.
+-   JavaScript: As the primary programming language.
+-   HTML/CSS: For the user interface.
+-   Fengari: A Lua VM for the browser, written in JavaScript, to parse the Koreader annotation files.
+-   marked: A Markdown parser built for speed, to convert Markdown to HTML.
 
 ## Build Tools
 
--   npm or yarn: For package management and dependency resolution.
--   Webpack or Parcel: For bundling the plugin code and assets.
+-   npm: For managing project dependencies.
+-   Electron Builder or similar: For packaging and distributing the application.
 
 ## Architecture
 
--   Event-driven: The plugin will primarily respond to events triggered by user actions or Logseq's internal events.
--   Modular: The codebase will be organized into modules for better maintainability and scalability.
+-   The application will follow a typical Electron project structure, with separate processes for the main process, renderer process, and potentially worker processes.
 
 ## Data Storage
 
--   Logseq's built-in data storage: The plugin will leverage Logseq's existing data storage mechanisms for storing imported annotations.
+-   The application will likely use a file-based storage mechanism (e.g., JSON files) to store user preferences and settings.
 
 ## External Dependencies
 
--   Potentially a parser library for handling Koreader's annotation file format, depending on its complexity.
+-   Fengari: For handling the Koreader annotation file format.
+-   marked: For converting Markdown to HTML.
+
+## Notes
+
+-   The decision has been made to use Electron for building the application.
+-   Vue.js will be used for the user interface.
+-   Fengari will be used for parsing Lua code.
+-   marked will be used for Markdown conversion.
