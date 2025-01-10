@@ -132,19 +132,33 @@ function parseAnnotationFile(content) {
   }
 
   const annotations = [];
+  let bookTitle = '';
   lua.lua_pushnil(L);
   while (lua.lua_next(L, -2) !== 0) {
     const annotation = {};
+    let timestamp = '';
 
     lua.lua_pushnil(L);
     while (lua.lua_next(L, -2) !== 0) {
       const key = lua.lua_tojsstring(L, -2);
       const value = lua.lua_tojsstring(L, -1);
       annotation[key] = value;
+      if (key === 'book') {
+        bookTitle = value;
+      }
+      if (key === 'datetime') {
+        timestamp = value;
+      }
       lua.lua_pop(L, 1);
     }
+    annotation.timestamp = timestamp;
     annotations.push(annotation);
     lua.lua_pop(L, 1);
+  }
+
+  // Add the book title to the first annotation
+  if (annotations.length > 0) {
+    annotations[0].book = bookTitle;
   }
 
   return annotations;
@@ -154,9 +168,9 @@ function convertToMarkdown(annotations) {
   let markdownOutput = '';
   for (const annotation of annotations) {
     const timestamp = annotation.timestamp ? `[[${new Date(annotation.timestamp).toISOString().slice(0, 10)}]]` : '';
-    markdownOutput += `### ${annotation.text} ${timestamp}\n`;
+    markdownOutput += `- ${annotation.text} ${timestamp}\n`;
     if (annotation.note) {
-      markdownOutput += `${annotation.note}\n`;
+      markdownOutput += `  ${annotation.note}\n`;
     }
     markdownOutput += '\n';
   }

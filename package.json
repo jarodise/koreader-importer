@@ -1,6 +1,6 @@
 {
   "name": "koreader-importer",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "A cross-platform desktop application to import Koreader annotations",
   "main": "main.js",
   "scripts": {

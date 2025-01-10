@@ -19,3 +19,4 @@
 
 -   Test the application with various scenarios (referencing the "Test the application with various scenarios" task in `projectRoadmap.md`). This involves testing the application with different annotation files, directory structures, and user inputs to ensure it functions correctly and handles errors gracefully.
 -   Write comprehensive documentation (referencing the "Write comprehensive documentation" task in `projectRoadmap.md`). This involves creating documentation for the application, including instructions on how to use it, explanations of its features, and any relevant technical details.
+-   Always prompt the user to run the app after each change.
