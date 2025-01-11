@@ -37,13 +37,48 @@ createApp({
       importResult.value = result;
     };
 
+    const handleSetDefaultDirectory = async () => {
+      try {
+        await window.electronAPI.saveSettings({ annotationFolderPath: folderPath.value });
+      } catch (error) {
+        console.error('Error saving settings:', error);
+      }
+    };
+
+    const handleSetDefaultOutputDirectory = async () => {
+      try {
+        await window.electronAPI.saveSettings({ outputFolderPath: outputPath.value });
+      } catch (error) {
+        console.error('Error saving settings:', error);
+      }
+    };
+
+     const handleLoadSettings = async () => {
+      try {
+        const loadedSettings = await window.electronAPI.loadSettings();
+         if (loadedSettings.annotationFolderPath) {
+          folderPath.value = loadedSettings.annotationFolderPath;
+        }
+        if (loadedSettings.outputFolderPath) {
+          outputPath.value = loadedSettings.outputFolderPath;
+        }
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      }
+    };
+
+    handleLoadSettings();
+
     return {
       folderPath,
       outputPath,
       importResult,
       handleSelectDirectory,
       handleSelectOutputDirectory,
-      handleImportAnnotations
+      handleImportAnnotations,
+      handleSetDefaultDirectory,
+      handleSetDefaultOutputDirectory,
+      handleLoadSettings
     };
   },
   template: `
@@ -53,31 +88,41 @@ createApp({
         <label htmlFor="folderPath" style="display: block; margin-bottom: 5px;">
           Koreader Annotation Folder:
         </label>
-        <input
-          type="text"
-          id="folderPath"
-          v-model="folderPath"
-          style="padding: 10px; width: 400px; margin-bottom: 10px;"
-          placeholder="Enter folder path"
-        />
-        <button @click="handleSelectDirectory" style="padding: 10px; margin-right: 10px;">
-          Select Directory
-        </button>
+        <div style="display: flex; align-items: center;">
+          <input
+            type="text"
+            id="folderPath"
+            v-model="folderPath"
+            style="padding: 10px; width: 400px; margin-bottom: 10px;"
+            placeholder="Enter folder path"
+          />
+          <button @click="handleSelectDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px;">
+            Select Directory
+          </button>
+          <button @click="handleSetDefaultDirectory" style="padding: 10px;">
+            Set as Default
+          </button>
+        </div>
       </div>
       <div style="margin-bottom: 20px;">
         <label htmlFor="outputPath" style="display: block; margin-bottom: 5px;">
           Output Folder:
         </label>
-        <input
-          type="text"
-          id="outputPath"
-          v-model="outputPath"
-          style="padding: 10px; width: 400px; margin-bottom: 10px;"
-          placeholder="Enter output path"
-        />
-        <button @click="handleSelectOutputDirectory" style="padding: 10px; margin-right: 10px;">
-          Select Output Directory
-        </button>
+        <div style="display: flex; align-items: center;">
+          <input
+            type="text"
+            id="outputPath"
+            v-model="outputPath"
+            style="padding: 10px; width: 400px; margin-bottom: 10px;"
+            placeholder="Enter output path"
+          />
+          <button @click="handleSelectOutputDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px;">
+            Select Output Directory
+          </button>
+           <button @click="handleSetDefaultOutputDirectory" style="padding: 10px;">
+            Set as Default
+          </button>
+        </div>
       </div>
       <button @click="handleImportAnnotations" :disabled="!folderPath || !outputPath" style="padding: 10px;">
         Import Annotations
