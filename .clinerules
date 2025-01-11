@@ -20,6 +20,13 @@
       "matchCase": false,
       "failMessage": "Do not disable lint rules without explicit user approval. Ask the user first and explain why.",
       "passMessage": "No lint rule disabling found."
+    },
+    {
+      "description": "Always test the app before committing",
+      "regex": "npm start",
+      "matchCase": false,
+      "failMessage": "Please test the app by running `npm start` before committing changes.",
+      "passMessage": "App test command found."
     }
   ]
 }

@@ -48,16 +48,21 @@ app.whenReady().then(() => {
         return { success: false, message: 'No Koreader annotation files found in the specified folder.' };
       }
 
-      // Parse the annotation files
-      const annotations = await parseAnnotationFiles(annotationFiles);
+      let allAnnotations = [];
+      for (const file of annotationFiles) {
+          // Parse the annotation files
+          const annotations = await parseAnnotationFiles([file]);
 
-      // Convert the parsed data to Markdown
-      const markdownOutput = convertToMarkdown(annotations);
+          // Convert the parsed data to Markdown
+          const markdownOutput = convertToMarkdown(annotations);
 
-      // Save the Markdown output to a file
-      const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputPath, annotations.length > 0 ? annotations[0].book : 'koreader-annotations');
+          // Save the Markdown output to a file
+          const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputPath, file.bookTitle);
+          allAnnotations.push({book: file.bookTitle, path: finalOutputPath})
+      }
 
-      return { success: true, message: `Successfully imported ${annotations.length} annotations and saved to ${finalOutputPath}.`, annotations };
+
+      return { success: true, message: `Successfully imported annotations and saved to ${allAnnotations.map(item => `${item.book}: ${item.path}`).join(', ')}.`, annotations: allAnnotations };
     } catch (error) {
       return { success: false, message: `Error importing annotations: ${error.message}` };
     }
@@ -76,21 +81,16 @@ async function fetchAnnotationFiles(folderPath) {
         for (const file of files) {
             const filePath = path.join(folderPath, file);
             const stat = await fs.stat(filePath);
+            let bookTitle = '';
 
             if (stat.isDirectory() && file.endsWith('.sdr')) {
+                bookTitle = file.replace(/\.sdr$/, '');
                 const luaFiles = await fs.readdir(filePath);
                 for (const luaFile of luaFiles) {
                     if (luaFile === 'metadata.epub.lua' || luaFile === 'metadata.pdf.lua') {
-                        const content = await fs.readFile(path.join(filePath, luaFile), 'utf-8');
-                        let bookTitle = '';
-                        const firstLine = content.split('\n')[0];
-                        if (firstLine) {
-                            const match = firstLine.match(/.*\/(.*)\.sdr\/.*/);
-                            if (match) {
-                                bookTitle = match[1];
-                            }
-                        }
-                        annotationFiles.push({ path: path.join(filePath, luaFile), content, bookTitle });
+                        const luaFilePath = path.join(filePath, luaFile);
+                        const content = await fs.readFile(luaFilePath, 'utf-8');
+                        annotationFiles.push({ path: luaFilePath, content, bookTitle });
                     }
                 }
             }
