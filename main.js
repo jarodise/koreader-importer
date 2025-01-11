@@ -218,7 +218,7 @@ function convertToMarkdown(annotations) {
 }
 
 async function saveMarkdownOutput(markdownOutput, outputPath, bookTitle) {
-  const finalOutputPath = path.join(outputPath, `${bookTitle.replace(/[^a-z0-9]/gi, '_')}.md`);
+  const finalOutputPath = path.join(outputPath, `${bookTitle.replace(/[^a-zA-Z0-9\u4E00-\u9FFF]/g, '_')}.md`);
   await fs.promises.writeFile(finalOutputPath, markdownOutput, 'utf-8');
   return finalOutputPath;
 }
