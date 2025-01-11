@@ -39,7 +39,7 @@ app.whenReady().then(() => {
     }
   });
 
-  ipcMain.handle('import-annotations', async (event, folderPath) => {
+  ipcMain.handle('import-annotations', async (event, folderPath, outputPath) => {
     try {
       // Fetch the annotation files from the default folder
       const annotationFiles = await fetchAnnotationFiles(folderPath);
@@ -55,9 +55,9 @@ app.whenReady().then(() => {
       const markdownOutput = convertToMarkdown(annotations);
 
       // Save the Markdown output to a file
-      const outputPath = await saveMarkdownOutput(markdownOutput, folderPath, annotations.length > 0 ? annotations[0].book : 'koreader-annotations');
+      const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputPath, annotations.length > 0 ? annotations[0].book : 'koreader-annotations');
 
-      return { success: true, message: `Successfully imported ${annotations.length} annotations and saved to ${outputPath}.`, annotations };
+      return { success: true, message: `Successfully imported ${annotations.length} annotations and saved to ${finalOutputPath}.`, annotations };
     } catch (error) {
       return { success: false, message: `Error importing annotations: ${error.message}` };
     }
@@ -177,8 +177,8 @@ function convertToMarkdown(annotations) {
   return markdownOutput;
 }
 
-async function saveMarkdownOutput(markdownOutput, folderPath, bookTitle) {
-  const outputPath = path.join(folderPath, `${bookTitle.replace(/[^a-z0-9]/gi, '_')}.md`);
-  await fs.writeFile(outputPath, markdownOutput, 'utf-8');
-  return outputPath;
+async function saveMarkdownOutput(markdownOutput, outputPath, bookTitle) {
+  const finalOutputPath = path.join(outputPath, `${bookTitle.replace(/[^a-z0-9]/gi, '_')}.md`);
+  await fs.writeFile(finalOutputPath, markdownOutput, 'utf-8');
+  return finalOutputPath;
 }

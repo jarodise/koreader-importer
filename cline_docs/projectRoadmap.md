@@ -11,6 +11,7 @@
 -   Allow users to customize the output format and structure of the imported annotations.
 -   Provide options for integrating with popular note-taking and knowledge management systems (e.g., Logseq, Obsidian, Roam Research).
 -   Handle potential errors gracefully (e.g., invalid annotation file, directory not found).
+-   Allow users to set a custom output destination for the generated markdown files.
 
 ## Completion Criteria
 
@@ -18,6 +19,7 @@
 -   Imported annotations are accurately represented in the chosen output format.
 -   The application handles various edge cases and potential errors.
 -   The application is thoroughly tested and documented.
+-   The application allows users to set a custom output destination for the generated markdown files.
 
 ## Progress Tracker
 
@@ -36,6 +38,7 @@
 -   [ ] Implement error handling and user feedback mechanisms.
 -   [ ] Test the application with various scenarios.
 -   [ ] Write comprehensive documentation.
+-   [ ] Implement a feature to allow users to set a custom output destination for the generated markdown files.
 
 ## Scalability Considerations
 

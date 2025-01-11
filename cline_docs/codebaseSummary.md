@@ -8,15 +8,15 @@
 
 ## Data Flow
 
-1. The user specifies the Koreader annotation directory and configures import settings through the UI (Renderer Process).
-2. The user initiates the import process through the UI (Renderer Process).
-3. The UI sends a message to the Main Process to start the import.
-4. The **Annotation Fetcher** (Main Process) fetches all annotation files from the specified directory.
-5. For each file, the **Annotation Parser** (Main Process) parses the file and extracts the annotation data.
-6. The parsed data is passed to the **Data Converter** (Main Process).
-7. The **Data Converter** transforms the data into the chosen output format.
-8. The **Output Generator** (Main Process) creates the output file(s) and saves them to the specified location.
-9. The Main Process sends a message to the Renderer Process to notify the user of the successful import or any errors encountered.
+1.  The user specifies the Koreader annotation directory and the output directory through the UI (Renderer Process).
+2.  The user initiates the import process through the UI (Renderer Process).
+3.  The UI sends a message to the Main Process to start the import, including the annotation directory and the output directory.
+4.  The **Annotation Fetcher** (Main Process) fetches all annotation files from the specified directory.
+5.  For each file, the **Annotation Parser** (Main Process) parses the file and extracts the annotation data.
+6.  The parsed data is passed to the **Data Converter** (Main Process).
+7.  The **Data Converter** transforms the data into the chosen output format.
+8.  The **Output Generator** (Main Process) creates the output file(s) and saves them to the specified output location.
+9.  The Main Process sends a message to the Renderer Process to notify the user of the successful import or any errors encountered.
 
 ## External Dependencies
 
@@ -29,6 +29,7 @@
 -   Removed files related to the Logseq plugin (`package.json`, `index.html`, `index.js`).
 -   Updated the documentation (`projectRoadmap.md`, `currentTask.md`, `techStack.md`, `codebaseSummary.md`) to reflect the new project direction.
 -   Renamed the project folder from `logseq-koreader-importer` to `koreader-importer`.
+-   Added a feature to allow users to set a custom output destination for the generated markdown files.
 
 ## User Feedback Integration and Its Impact on Development
 

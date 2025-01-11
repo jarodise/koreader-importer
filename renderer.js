@@ -3,6 +3,7 @@ const { createApp, ref } = Vue;
 createApp({
   setup() {
     const folderPath = ref('');
+    const outputPath = ref('');
     const importResult = ref(null);
 
     const handleSelectDirectory = async () => {
@@ -14,19 +15,34 @@ createApp({
       }
     };
 
+    const handleSelectOutputDirectory = async () => {
+        console.log('select output directory clicked');
+        const path = await window.electronAPI.selectDirectory();
+        console.log('selected output path:', path);
+        if (path) {
+          outputPath.value = path;
+        }
+      };
+
     const handleImportAnnotations = async () => {
       if (!folderPath.value) {
         importResult.value = { success: false, message: 'Please select a directory first.' };
         return;
       }
-      const result = await window.electronAPI.importAnnotations(folderPath.value);
+      if (!outputPath.value) {
+        importResult.value = { success: false, message: 'Please select an output directory first.' };
+        return;
+      }
+      const result = await window.electronAPI.importAnnotations(folderPath.value, outputPath.value);
       importResult.value = result;
     };
 
     return {
       folderPath,
+      outputPath,
       importResult,
       handleSelectDirectory,
+      handleSelectOutputDirectory,
       handleImportAnnotations
     };
   },
@@ -47,10 +63,25 @@ createApp({
         <button @click="handleSelectDirectory" style="padding: 10px; margin-right: 10px;">
           Select Directory
         </button>
-        <button @click="handleImportAnnotations" :disabled="!folderPath" style="padding: 10px;">
-          Import Annotations
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label htmlFor="outputPath" style="display: block; margin-bottom: 5px;">
+          Output Folder:
+        </label>
+        <input
+          type="text"
+          id="outputPath"
+          v-model="outputPath"
+          style="padding: 10px; width: 400px; margin-bottom: 10px;"
+          placeholder="Enter output path"
+        />
+        <button @click="handleSelectOutputDirectory" style="padding: 10px; margin-right: 10px;">
+          Select Output Directory
         </button>
       </div>
+      <button @click="handleImportAnnotations" :disabled="!folderPath || !outputPath" style="padding: 10px;">
+        Import Annotations
+      </button>
       <div v-if="importResult" style="margin-top: 20px;">
         <p :style="{ color: importResult.success ? 'green' : 'red' }">
           {{ importResult.message }}
