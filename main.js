@@ -73,7 +73,9 @@ app.whenReady().then(() => {
 
           // Save the Markdown output to a file
           const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputFolderPath, file.bookTitle);
-          allAnnotations.push({book: file.bookTitle, path: finalOutputPath})
+          if (finalOutputPath) {
+            allAnnotations.push({book: file.bookTitle, path: finalOutputPath})
+          }
       }
 
 
@@ -218,6 +220,9 @@ function convertToMarkdown(annotations) {
 }
 
 async function saveMarkdownOutput(markdownOutput, outputPath, bookTitle) {
+  if (!markdownOutput) {
+    return null;
+  }
   const finalOutputPath = path.join(outputPath, `${bookTitle.replace(/[^a-zA-Z0-9\u4E00-\u9FFF]/g, '_')}.md`);
   await fs.promises.writeFile(finalOutputPath, markdownOutput, 'utf-8');
   return finalOutputPath;
