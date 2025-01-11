@@ -209,7 +209,7 @@ function parseAnnotationFile(content) {
 function convertToMarkdown(annotations) {
   let markdownOutput = '';
   for (const annotation of annotations) {
-    const timestamp = annotation.timestamp ? `[[${new Date(annotation.timestamp).toISOString().slice(0, 10)}]]` : '';
+    const timestamp = annotation.timestamp ? `[[${new Date(annotation.timestamp).toISOString().slice(0, 10)}]]#koreader` : '';
     markdownOutput += `- ${annotation.text} ${timestamp}\n`;
     if (annotation.note) {
       markdownOutput += `  ${annotation.note}\n`;
