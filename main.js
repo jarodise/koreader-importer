@@ -1,11 +1,23 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const fs = require('fs/promises');
+const fs = require('fs');
 const fengari = require('fengari');
 const lua = fengari.lua;
 const lauxlib = fengari.lauxlib;
 const lualib = fengari.lualib;
 const { marked } = require('marked');
+
+let config = {
+  annotationFolderPath: "",
+  outputFolderPath: ""
+};
+
+try {
+  const configData = fs.readFileSync(path.join(__dirname, 'config.json'));
+  config = JSON.parse(configData);
+} catch (error) {
+  console.error('Error reading or parsing config.json:', error);
+}
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -40,9 +52,12 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('import-annotations', async (event, folderPath, outputPath) => {
+    const annotationFolderPath = folderPath || config.annotationFolderPath;
+    const outputFolderPath = outputPath || config.outputFolderPath;
+
     try {
       // Fetch the annotation files from the default folder
-      const annotationFiles = await fetchAnnotationFiles(folderPath);
+      const annotationFiles = await fetchAnnotationFiles(annotationFolderPath);
 
       if (annotationFiles.length === 0) {
         return { success: false, message: 'No Koreader annotation files found in the specified folder.' };
@@ -57,7 +72,7 @@ app.whenReady().then(() => {
           const markdownOutput = convertToMarkdown(annotations);
 
           // Save the Markdown output to a file
-          const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputPath, file.bookTitle);
+          const finalOutputPath = await saveMarkdownOutput(markdownOutput, outputFolderPath, file.bookTitle);
           allAnnotations.push({book: file.bookTitle, path: finalOutputPath})
       }
 
@@ -67,6 +82,22 @@ app.whenReady().then(() => {
       return { success: false, message: `Error importing annotations: ${error.message}` };
     }
   });
+
+  ipcMain.handle('save-settings', async (event, settings) => {
+    try {
+      const updatedSettings = { ...config, ...settings };
+      await fs.promises.writeFile(path.join(__dirname, 'config.json'), JSON.stringify(updatedSettings, null, 2));
+      config = updatedSettings;
+      return { success: true };
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      return { success: false, message: error.message };
+    }
+  });
+
+  ipcMain.handle('load-settings', async () => {
+    return config;
+  });
 });
 
 app.on('window-all-closed', function () {
@@ -75,21 +106,21 @@ app.on('window-all-closed', function () {
 
 async function fetchAnnotationFiles(folderPath) {
     try {
-        const files = await fs.readdir(folderPath);
+        const files = await fs.promises.readdir(folderPath);
         const annotationFiles = [];
 
         for (const file of files) {
             const filePath = path.join(folderPath, file);
-            const stat = await fs.stat(filePath);
+            const stat = await fs.promises.stat(filePath);
             let bookTitle = '';
 
             if (stat.isDirectory() && file.endsWith('.sdr')) {
                 bookTitle = file.replace(/\.sdr$/, '');
-                const luaFiles = await fs.readdir(filePath);
+                const luaFiles = await fs.promises.readdir(filePath);
                 for (const luaFile of luaFiles) {
                     if (luaFile === 'metadata.epub.lua' || luaFile === 'metadata.pdf.lua') {
                         const luaFilePath = path.join(filePath, luaFile);
-                        const content = await fs.readFile(luaFilePath, 'utf-8');
+                        const content = await fs.promises.readFile(luaFilePath, 'utf-8');
                         annotationFiles.push({ path: luaFilePath, content, bookTitle });
                     }
                 }
@@ -188,6 +219,54 @@ function convertToMarkdown(annotations) {
 
 async function saveMarkdownOutput(markdownOutput, outputPath, bookTitle) {
   const finalOutputPath = path.join(outputPath, `${bookTitle.replace(/[^a-z0-9]/gi, '_')}.md`);
-  await fs.writeFile(finalOutputPath, markdownOutput, 'utf-8');
+  await fs.promises.writeFile(finalOutputPath, markdownOutput, 'utf-8');
   return finalOutputPath;
+}
+
+function parseMarkdownAnnotations(markdown) {
+    const tokens = marked.lexer(markdown);
+    const annotations = [];
+    let currentAnnotation = null;
+    for (const token of tokens) {
+        if (token.type === 'list_item_start') {
+            currentAnnotation = { text: '', note: '' };
+        } else if (token.type === 'text' && currentAnnotation) {
+            currentAnnotation.text = token.text;
+        } else if (token.type === 'space' && currentAnnotation) {
+            // ignore
+        } else if (token.type === 'paragraph' && currentAnnotation) {
+            currentAnnotation.note = token.text;
+            annotations.push(currentAnnotation);
+            currentAnnotation = null;
+        } else if (token.type === 'list_item_end') {
+            if (currentAnnotation) {
+                annotations.push(currentAnnotation);
+                currentAnnotation = null;
+            }
+        }
+    }
+    return annotations;
+}
+
+function mergeAnnotations(existingAnnotations, newAnnotations) {
+    const mergedAnnotations = [...existingAnnotations];
+    for (const newAnnotation of newAnnotations) {
+        const existingAnnotation = mergedAnnotations.find(annotation => annotation.text === newAnnotation.text);
+        if (!existingAnnotation) {
+            mergedAnnotations.push(newAnnotation);
+        }
+    }
+    return mergedAnnotations;
+}
+
+function convertAnnotationsToMarkdown(annotations) {
+    let markdownOutput = '';
+    for (const annotation of annotations) {
+        markdownOutput += `- ${annotation.text}\n`;
+        if (annotation.note) {
+            markdownOutput += `  ${annotation.note}\n`;
+        }
+        markdownOutput += '\n';
+    }
+    return markdownOutput;
 }

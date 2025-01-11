@@ -33,6 +33,7 @@
 -   Added a feature to support importing annotations from multiple books within a directory.
 -   Modified the `fetchAnnotationFiles` function to extract the book title from the name of the `.sdr` directory.
 -   Modified the `ipcMain.handle('import-annotations')` function to process each book's annotations separately and save them to individual files.
+-   Modified the `saveMarkdownOutput` function to simply overwrite the output file with the new content.
 
 ## User Feedback Integration and Its Impact on Development
 
