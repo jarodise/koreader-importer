@@ -34,6 +34,11 @@
 -   Modified the `fetchAnnotationFiles` function to extract the book title from the name of the `.sdr` directory.
 -   Modified the `ipcMain.handle('import-annotations')` function to process each book's annotations separately and save them to individual files.
 -   Modified the `saveMarkdownOutput` function to simply overwrite the output file with the new content.
+-   Modified the `renderer.js` file to remove the empty annotation frames and add basic styling to the UI.
+-   Modified the `renderer.js` file to improve the styling of the UI and make the imported record section look tidier.
+-   Modified the `renderer.js` file to add a max-width to the imported record section and add padding to the list items.
+-   Modified the `renderer.js` file to remove the border around the import result section and add spacing between the list items.
+-   Modified the `renderer.js` file to remove the success message when the list of imported files is displayed.
 
 ## User Feedback Integration and Its Impact on Development
 

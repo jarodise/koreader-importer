@@ -93,13 +93,13 @@ createApp({
             type="text"
             id="folderPath"
             v-model="folderPath"
-            style="padding: 10px; width: 400px; margin-bottom: 10px;"
+            style="padding: 10px; width: 400px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"
             placeholder="Enter folder path"
           />
-          <button @click="handleSelectDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px;">
+          <button @click="handleSelectDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
             Select Directory
           </button>
-          <button @click="handleSetDefaultDirectory" style="padding: 10px;">
+          <button @click="handleSetDefaultDirectory" style="padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
             Set as Default
           </button>
         </div>
@@ -113,29 +113,28 @@ createApp({
             type="text"
             id="outputPath"
             v-model="outputPath"
-            style="padding: 10px; width: 400px; margin-bottom: 10px;"
+            style="padding: 10px; width: 400px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;"
             placeholder="Enter output path"
           />
-          <button @click="handleSelectOutputDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px;">
+          <button @click="handleSelectOutputDirectory" style="padding: 10px; margin-left: 10px; margin-right: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
             Select Output Directory
           </button>
-           <button @click="handleSetDefaultOutputDirectory" style="padding: 10px;">
+           <button @click="handleSetDefaultOutputDirectory" style="padding: 10px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">
             Set as Default
           </button>
         </div>
       </div>
-      <button @click="handleImportAnnotations" :disabled="!folderPath || !outputPath" style="padding: 10px;">
+      <button @click="handleImportAnnotations" :disabled="!folderPath || !outputPath" style="padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
         Import Annotations
       </button>
-      <div v-if="importResult" style="margin-top: 20px;">
-        <p :style="{ color: importResult.success ? 'green' : 'red' }">
+      <div v-if="importResult" style="margin-top: 20px; padding: 10px; max-width: 800px;">
+        <p v-if="importResult.message && !importResult.annotations" :style="{ color: importResult.success ? 'green' : 'red' }">
           {{ importResult.message }}
         </p>
-        <ul v-if="importResult.annotations" style="list-style-type: none; padding: 0;">
-          <li v-for="(annotation, index) in importResult.annotations" :key="index" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-            <p><strong>Text:</strong> {{ annotation.text }}</p>
-            <p v-if="annotation.note"><strong>Note:</strong> {{ annotation.note }}</p>
-          </li>
+        <ul v-if="importResult.annotations" style="list-style-type: disc; padding-left: 20px;">
+            <li v-for="(annotation, index) in importResult.annotations" :key="index" style="padding: 5px 0; margin-bottom: 5px;">
+                {{ annotation.book }}: {{ annotation.path }}
+            </li>
         </ul>
       </div>
     </div>
