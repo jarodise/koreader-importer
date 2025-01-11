@@ -69,29 +69,38 @@ app.on('window-all-closed', function () {
 });
 
 async function fetchAnnotationFiles(folderPath) {
-  try {
-    const files = await fs.readdir(folderPath);
-    const luaFiles = files.filter(file => path.extname(file) === '.lua');
+    try {
+        const files = await fs.readdir(folderPath);
+        const annotationFiles = [];
 
-    const filePromises = luaFiles.map(async file => {
-      const filePath = path.join(folderPath, file);
-      const content = await fs.readFile(filePath, 'utf-8');
-      let bookTitle = '';
-      const firstLine = content.split('\n')[0];
-      if (firstLine) {
-        const match = firstLine.match(/.*\/(.*)\.sdr\/.*/);
-        if (match) {
-          bookTitle = match[1];
+        for (const file of files) {
+            const filePath = path.join(folderPath, file);
+            const stat = await fs.stat(filePath);
+
+            if (stat.isDirectory() && file.endsWith('.sdr')) {
+                const luaFiles = await fs.readdir(filePath);
+                for (const luaFile of luaFiles) {
+                    if (luaFile === 'metadata.epub.lua' || luaFile === 'metadata.pdf.lua') {
+                        const content = await fs.readFile(path.join(filePath, luaFile), 'utf-8');
+                        let bookTitle = '';
+                        const firstLine = content.split('\n')[0];
+                        if (firstLine) {
+                            const match = firstLine.match(/.*\/(.*)\.sdr\/.*/);
+                            if (match) {
+                                bookTitle = match[1];
+                            }
+                        }
+                        annotationFiles.push({ path: path.join(filePath, luaFile), content, bookTitle });
+                    }
+                }
+            }
         }
-      }
-      return { path: filePath, content, bookTitle };
-    });
-
-    return Promise.all(filePromises);
-  } catch (error) {
-    throw new Error(`Error fetching annotation files: ${error.message}`);
-  }
+        return annotationFiles;
+    } catch (error) {
+        throw new Error(`Error fetching annotation files: ${error.message}`);
+    }
 }
+
 
 async function parseAnnotationFiles(files) {
   const annotations = [];

@@ -1,6 +1,6 @@
 ## Key Components and Their Interactions
 
--   **Annotation Fetcher (Main Process)**: Responsible for fetching Koreader annotation files from a user-specified directory. It interacts with the **Annotation Parser** to process the files. This component runs in the main process of the Electron application.
+-   **Annotation Fetcher (Main Process)**: Responsible for fetching Koreader annotation files from a user-specified directory. It recursively searches for `.sdr` directories and then looks for `metadata.epub.lua` or `metadata.pdf.lua` files within those directories. It interacts with the **Annotation Parser** to process the files. This component runs in the main process of the Electron application.
 -   **Annotation Parser (Main Process)**: Parses the Lua table structure of Koreader annotation files and extracts relevant information (e.g., highlighted text, notes, timestamps, location). It interacts with the **Data Converter** to transform the parsed data. This component runs in the main process of the Electron application.
 -   **Data Converter (Main Process)**: Converts the parsed annotation data into various output formats (e.g., Markdown, JSON, CSV) based on user preferences. It interacts with the **Output Generator**. This component runs in the main process of the Electron application.
 -   **Output Generator (Main Process)**: Generates the final output files in the chosen format and saves them to the user-specified location. This component runs in the main process of the Electron application.
@@ -11,7 +11,7 @@
 1.  The user specifies the Koreader annotation directory and the output directory through the UI (Renderer Process).
 2.  The user initiates the import process through the UI (Renderer Process).
 3.  The UI sends a message to the Main Process to start the import, including the annotation directory and the output directory.
-4.  The **Annotation Fetcher** (Main Process) fetches all annotation files from the specified directory.
+4.  The **Annotation Fetcher** (Main Process) recursively searches for `.sdr` directories within the specified directory and then looks for `metadata.epub.lua` or `metadata.pdf.lua` files within those directories.
 5.  For each file, the **Annotation Parser** (Main Process) parses the file and extracts the annotation data.
 6.  The parsed data is passed to the **Data Converter** (Main Process).
 7.  The **Data Converter** transforms the data into the chosen output format.
@@ -30,6 +30,7 @@
 -   Updated the documentation (`projectRoadmap.md`, `currentTask.md`, `techStack.md`, `codebaseSummary.md`) to reflect the new project direction.
 -   Renamed the project folder from `logseq-koreader-importer` to `koreader-importer`.
 -   Added a feature to allow users to set a custom output destination for the generated markdown files.
+-   Added a feature to support importing annotations from multiple books within a directory.
 
 ## User Feedback Integration and Its Impact on Development
 

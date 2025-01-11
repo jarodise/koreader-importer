@@ -1,5 +1,6 @@
 ## Current Objectives
 
+-   Implement a feature to support importing annotations from multiple books within a directory.
 -   Implement a feature to allow users to set a custom output destination for the generated markdown files.
 -   Test the application with various scenarios.
 -   Write comprehensive documentation.
@@ -20,6 +21,7 @@
 
 ## Next Steps
 
+-   Implement a feature to support importing annotations from multiple books within a directory (referencing the "Implement a feature to support importing annotations from multiple books within a directory" task in `projectRoadmap.md`). This involves modifying the existing codebase to handle multiple book directories, identify annotation files, and process them accordingly.
 -   Implement a feature to allow users to set a custom output destination for the generated markdown files (referencing the "Implement a feature to allow users to set a custom output destination for the generated markdown files" task in `projectRoadmap.md`). This involves modifying the existing codebase to handle a user-defined output path.
 -   Test the application with various scenarios (referencing the "Test the application with various scenarios" task in `projectRoadmap.md`). This involves testing the application with different annotation files, directory structures, and user inputs to ensure it functions correctly and handles errors gracefully.
 -   Write comprehensive documentation (referencing the "Write comprehensive documentation" task in `projectRoadmap.md`). This involves creating documentation for the application, including instructions on how to use it, explanations of its features, and any relevant technical details.

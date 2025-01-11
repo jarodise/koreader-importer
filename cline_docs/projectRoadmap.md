@@ -12,6 +12,7 @@
 -   Provide options for integrating with popular note-taking and knowledge management systems (e.g., Logseq, Obsidian, Roam Research).
 -   Handle potential errors gracefully (e.g., invalid annotation file, directory not found).
 -   Allow users to set a custom output destination for the generated markdown files.
+-   Support importing annotations from multiple books within a directory.
 
 ## Completion Criteria
 
@@ -20,6 +21,7 @@
 -   The application handles various edge cases and potential errors.
 -   The application is thoroughly tested and documented.
 -   The application allows users to set a custom output destination for the generated markdown files.
+-   The application supports importing annotations from multiple books within a directory.
 
 ## Progress Tracker
 
@@ -39,6 +41,7 @@
 -   [ ] Test the application with various scenarios.
 -   [ ] Write comprehensive documentation.
 -   [ ] Implement a feature to allow users to set a custom output destination for the generated markdown files.
+-   [ ] Implement a feature to support importing annotations from multiple books within a directory.
 
 ## Scalability Considerations
 
