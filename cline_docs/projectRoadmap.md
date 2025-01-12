@@ -29,6 +29,7 @@
 
 -   [x] Research Koreader annotation file format.
 -   [x] Determine the new project direction (Electron-based cross-platform application).
+-   [x] Upload the mac app to GitHub repo as a release.
 
 ### Pending Tasks
 
