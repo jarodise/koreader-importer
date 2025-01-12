@@ -9,12 +9,12 @@ KOReader Importer is a desktop application designed to simplify the process of i
 
 2. **Select Annotation Folder:**
     -   In the "Koreader Annotation Folder" section, click the "Select Directory" button.
-    -   Choose the folder containing your Koreader annotations (e.g., `/Users/jarodise/Documents/Ebooks`).
+    -   Choose the folder containing your Koreader annotations (e.g., `/path/to/koreader/annotations`).
     -   The selected path will appear in the text field.
 
 3. **Select Output Folder:**
     -   In the "Output Folder" section, click the "Select Output Directory" button.
-    -   Choose the folder where you want to save the exported Markdown files (e.g., `/Users/jarodise/Documents/GitHub/logseq/pages/koreader-booknotes`).
+    -   Choose the folder where you want to save the exported Markdown files (e.g., `/path/to/output/folder`).
     -   The selected path will appear in the text field.
 
 4. **Import Annotations:**
