@@ -25,4 +25,9 @@ KOReader Importer is a desktop application designed to simplify the process of i
     -   If you want to save the selected input and output paths for future use, click the "Set as Default" button next to each path.
     -   The next time you open the app, these paths will be automatically filled in.
 
+## Important Notes
+
+-   **Annotation Location:** This app only works if your KOReader annotations are saved in the same directory as your book files within the KOReader application.
+-   **File Overwriting:** Each time you import annotations, the existing Markdown files in the output directory will be overwritten. **Do not make direct changes to these files.** Instead, use block references in apps like Logseq or Obsidian to refer to the content without modifying the original files.
+
 *Note: The "Features," "Troubleshooting," and "Contributing" sections will be updated later with accurate information.*
