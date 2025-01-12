@@ -12,33 +12,26 @@ KOReader Importer is a desktop application designed to simplify the process of t
 
 ## How to Use
 
-1. **Installation:**
-   - Download the latest release of KOReader Importer from the [Releases](<repository-url>/releases) page.
-   - Install the application on your computer (instructions vary depending on your operating system).
+1. **Launch the App:**
+    -   Open KOReader Importer from your applications menu.
 
-2. **Launching the App:**
-   - Open KOReader Importer from your applications menu.
+2. **Select Annotation Folder:**
+    -   In the "Koreader Annotation Folder" section, click the "Select Directory" button.
+    -   Choose the folder containing your Koreader annotations (e.g., `/Users/jarodise/Documents/Ebooks`).
+    -   The selected path will appear in the text field.
 
-3. **Importing Files:**
-   - Drag and drop the documents or books you want to import into the app window.
-   - Alternatively, click the "Import" button and select the files from your computer.
+3. **Select Output Folder:**
+    -   In the "Output Folder" section, click the "Select Output Directory" button.
+    -   Choose the folder where you want to save the exported Markdown files (e.g., `/Users/jarodise/Documents/GitHub/logseq/pages/koreader-booknotes`).
+    -   The selected path will appear in the text field.
 
-4. **Organizing Your Library:**
-   - Create folders to organize your imported files by clicking the "New Folder" button.
-   - Drag and drop files into folders to categorize them.
-   - Right-click on a file to edit its metadata, such as title, author, and cover image.
+4. **Import Annotations:**
+    -   Click the "Import Annotations" button.
+    -   The app will process the annotations and export them as Markdown files to the specified output folder. Each book's annotations will be saved in a separate file.
 
-5. **Connecting Your Device:**
-   - Connect your KOReader device to your computer using a USB cable.
-   - The app should automatically detect your device. If not, click the "Refresh" button in the device panel.
-
-6. **Syncing Content:**
-   - Select the files or folders you want to transfer to your device.
-   - Click the "Sync" button to start the synchronization process.
-   - The app will transfer the selected files to your KOReader device, converting formats if necessary.
-
-7. **Ejecting Your Device:**
-   - Once the sync is complete, click the "Eject" button to safely disconnect your device.
+5. **(Optional) Set Default Paths:**
+    -   If you want to save the selected input and output paths for future use, click the "Set as Default" button next to each path.
+    -   The next time you open the app, these paths will be automatically filled in.
 
 ## Troubleshooting
 
